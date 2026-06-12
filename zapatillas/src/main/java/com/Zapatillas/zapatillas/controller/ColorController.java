@@ -24,7 +24,7 @@ import jakarta.validation.Valid;
 @RestController
 @RequestMapping("/api/v1/color")
 public class ColorController {
-@Autowired
+    @Autowired
     private ColorService colorService;
 
     @GetMapping
