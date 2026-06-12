@@ -1,0 +1,13 @@
+package com.Zapatillas.zapatillas;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class ZapatillasApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(ZapatillasApplication.class, args);
+	}
+
+}
