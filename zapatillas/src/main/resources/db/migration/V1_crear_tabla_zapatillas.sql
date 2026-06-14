@@ -39,7 +39,7 @@ CREATE TABLE zapatilla(
         REFERENCES sexo(id)
 );
 
-CREATE TABLE colores(
+CREATE TABLE colores_zapatilla(
     id INT AUTO_INCREMENT PRIMARY KEY,
 
     zapatilla_id INT,
@@ -54,7 +54,7 @@ CREATE TABLE colores(
         REFERENCES color(id)
 );
 
-CREATE TABLE tipos(
+CREATE TABLE tipos_zapatilla(
     id INT AUTO_INCREMENT PRIMARY KEY,
 
     zapatilla_id INT,
@@ -69,7 +69,7 @@ CREATE TABLE tipos(
         REFERENCES tipo(id)
 );
 
-CREATE TABLE materiales(
+CREATE TABLE materiales_zapatilla(
     id INT AUTO_INCREMENT PRIMARY KEY,
 
     zapatilla_id INT,
