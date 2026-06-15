@@ -18,8 +18,11 @@ import com.Zapatillas.zapatillas.DTO.SexoDTO;
 import com.Zapatillas.zapatillas.model.Sexo;
 import com.Zapatillas.zapatillas.service.SexoService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Sexos",description = "Endpoints para gestionar el sexo de la zapatilla")
 @RestController
 @RequestMapping("/api/v1/sexos")
 public class SexoController {
@@ -27,6 +30,10 @@ public class SexoController {
     @Autowired
     private SexoService sexoService;
 
+    @Operation(
+        summary = "Listar sexos",
+        description = "Obtiene todos los sexos de zapatillas que estan registradas en el sistema"
+    )
     @GetMapping
     public ResponseEntity<List<SexoDTO>> obtenerTodosSexos() {
         List<SexoDTO> sexos = sexoService.obtenerTodos();
@@ -36,6 +43,10 @@ public class SexoController {
         return new ResponseEntity<>(sexos, HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "Buscar sexo",
+        description = "busca el sexo de la zapatilla por su id"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarSexoPorId(@PathVariable Integer id) {
         try {
@@ -45,6 +56,10 @@ public class SexoController {
         }
     }
 
+    @Operation(
+        summary = "Registra sexo",
+        description = "Registra el sexo de la zapatilla en el sistema"
+    )
     @PostMapping
     public ResponseEntity<?> agregarSexo(@Valid @RequestBody Sexo sexo) {
         try {
@@ -54,6 +69,10 @@ public class SexoController {
         }
     }
 
+    @Operation(
+        summary = "Actualizar sexp",
+        description = "Edita el sexo de la zapatilla por su id"
+    )
     @PutMapping("/{id}")
     public ResponseEntity<?> actualizarSexon(@PathVariable Integer id, @RequestBody Sexo sexo) {
         try {
@@ -63,6 +82,10 @@ public class SexoController {
         }
     }
 
+    @Operation(
+        summary = "Eliminar sexo",
+        description = "Elimina del sistema el sexo de la zapatilla"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarSexo(@PathVariable Integer id) {
         try {

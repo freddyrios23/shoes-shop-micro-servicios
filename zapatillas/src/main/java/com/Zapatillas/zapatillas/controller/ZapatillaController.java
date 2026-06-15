@@ -18,8 +18,11 @@ import com.Zapatillas.zapatillas.DTO.ZapatillaDTO;
 import com.Zapatillas.zapatillas.model.Zapatilla;
 import com.Zapatillas.zapatillas.service.ZapatillaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Zapatillas", description = "Endpoints para gestion zapatillas")
 @RestController
 @RequestMapping("/api/v1/zapatillas")
 public class ZapatillaController {
@@ -27,6 +30,10 @@ public class ZapatillaController {
     @Autowired
     private ZapatillaService zapatillaService;
 
+    @Operation(
+        summary = "Listar Zapatillas",
+        description = "Obtiene todas las zapatillas que stan registradas en el sistema"
+    )
     @GetMapping
     public ResponseEntity<List<ZapatillaDTO>> todosLasZapatillas(){
         List<ZapatillaDTO> zapatillas = zapatillaService.obtenerTodas();
@@ -36,6 +43,10 @@ public class ZapatillaController {
         return new ResponseEntity<>(zapatillas,HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "Buscar Zapatilla",
+        description = "Obtiene La zapatilla por un id especifico"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarZapatillaPorId(@PathVariable Integer id){
         try {
@@ -46,6 +57,10 @@ public class ZapatillaController {
         }
     }
 
+    @Operation(
+        summary = "Agregar Zapatilla",
+        description = "Registra una nueva zapatilla en el sistema"
+    )
     @PostMapping
     public ResponseEntity<?> agregarZapatilla(@Valid @RequestBody Zapatilla zapatilla){
         try {
@@ -54,7 +69,11 @@ public class ZapatillaController {
             return new ResponseEntity<>("no se guardo la zapatilla",HttpStatus.BAD_REQUEST);
         }
     }
-        
+
+    @Operation(
+        summary = "Editar Zapatilla",
+        description = "Edita una zapatilla por un id especifico"
+    )    
     @PatchMapping("/{id}")
     public ResponseEntity<?> editarZapatilla(@PathVariable Integer id, @Valid @RequestBody Zapatilla zapatilla){
         try {
@@ -66,6 +85,10 @@ public class ZapatillaController {
         }
     }
     
+    @Operation(
+        summary = "Elmina Zapatilla",
+        description = "elimina una zapatilla por un id especifico"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarZapatilla(@PathVariable Integer id){
 

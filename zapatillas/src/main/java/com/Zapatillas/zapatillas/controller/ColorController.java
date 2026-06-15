@@ -18,15 +18,21 @@ import com.Zapatillas.zapatillas.DTO.ColorDTO;
 import com.Zapatillas.zapatillas.model.Color;
 import com.Zapatillas.zapatillas.service.ColorService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-
+@Tag(name = "Colores",description = "Endpoints para gestionar los colores disponibles de las zapatillas")
 @RestController
 @RequestMapping("/api/v1/color")
 public class ColorController {
     @Autowired
     private ColorService colorService;
 
+    @Operation(
+        summary = "Listar colores",
+        description = "Obtiene todos los colores registrados en el sistema"
+    )
     @GetMapping
     public ResponseEntity<List<ColorDTO>> todosLosColores(){
         List<ColorDTO> colores = colorService.obtenerTodos();
@@ -36,6 +42,10 @@ public class ColorController {
         return new ResponseEntity<>(colores,HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "Buscar color por ID",
+        description = "Obtiene un color específico según su identificador"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarColorPorId(@PathVariable Integer id){
         try {
@@ -46,6 +56,10 @@ public class ColorController {
         }
     }
 
+    @Operation(
+        summary = "Crear color",
+        description = "Registra un nuevo color disponible para las zapatillas"
+    )    
     @PostMapping
     public ResponseEntity<?> agregarColor(@Valid @RequestBody Color color){
         try {
@@ -55,6 +69,10 @@ public class ColorController {
         }
     }
 
+    @Operation(
+        summary = "Actualizar color",
+        description = "Actualiza los datos de un color existente"
+    )    
     @PatchMapping("/{id}")
     public ResponseEntity<?> editarcolor(@PathVariable Integer id, @Valid @RequestBody Color color){
         try {
@@ -66,6 +84,10 @@ public class ColorController {
         }
     }
 
+    @Operation(
+        summary = "Eliminar color",
+        description = "Elimina un color según su identificador"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarColores(@PathVariable Integer id){
 

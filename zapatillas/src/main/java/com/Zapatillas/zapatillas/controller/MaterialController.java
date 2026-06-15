@@ -18,14 +18,21 @@ import com.Zapatillas.zapatillas.DTO.MaterialDTO;
 import com.Zapatillas.zapatillas.model.Material;
 import com.Zapatillas.zapatillas.service.MaterialService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "materiales",description = "Endpoints para gestionar el material de la zapatilla")
 @RestController
 @RequestMapping("/api/v1/material")
 public class MaterialController {
     @Autowired
     private MaterialService materialService;
 
+    @Operation(
+        summary = "Listar materiales",
+        description = "Obtiene todos los materiales registrados en el sistema"
+    )
     @GetMapping
     public ResponseEntity<List<MaterialDTO>> todosLosMateriales() {
         List<MaterialDTO> materiales = materialService.obtenerTodos();
@@ -35,6 +42,10 @@ public class MaterialController {
         return new ResponseEntity<>(materiales, HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "Buscar material",
+        description = "busca el mateial de la zapatilla por su id"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarMaterialPorId(@PathVariable Integer id) {
         try {
@@ -45,6 +56,10 @@ public class MaterialController {
         }
     }
 
+    @Operation(
+        summary = "Registra el material",
+        description = "Agrega el material de la zapatilla al sistema"
+    )
     @PostMapping
     public ResponseEntity<?> agregarMaterial(@Valid @RequestBody Material material) {
         try {
@@ -54,6 +69,10 @@ public class MaterialController {
         }
     }
 
+    @Operation(
+        summary = "Edita material",
+        description = "Actualiza el matrial de la zapatilla por su id"
+    )
     @PatchMapping("/{id}")
     public ResponseEntity<?> editarMaterial(@PathVariable Integer id, @Valid @RequestBody Material material) {
         try {
@@ -64,6 +83,10 @@ public class MaterialController {
         }
     }
 
+    @Operation(
+        summary = "Elimina material",
+        description = "Elimina el material de la zapatilla por su id"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarMaterial(@PathVariable Integer id) {
         String resultado = materialService.eliminarMaterial(id);

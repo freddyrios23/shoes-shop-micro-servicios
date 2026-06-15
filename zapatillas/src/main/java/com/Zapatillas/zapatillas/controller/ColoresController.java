@@ -14,6 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Zapatillas.zapatillas.model.Colores;
 import com.Zapatillas.zapatillas.service.ColoresService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Colores",description = "Endpoints para gestionar los colores de las zapatillas")
 @RestController
 @RequestMapping("/api/v1/colores")
 public class ColoresController {
@@ -21,6 +25,9 @@ public class ColoresController {
     @Autowired
     private ColoresService coloresService;
 
+    @Operation(
+        summary = "Listar colores asociados a zapatillas"
+    )
     @GetMapping
     public ResponseEntity<List<Colores>> todosLosColores() {
         List<Colores> colores = coloresService.obtenerTodos();
@@ -31,6 +38,9 @@ public class ColoresController {
         return new ResponseEntity<>(colores, HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "Asociar color a zapatilla"
+    )
     @PostMapping
     public ResponseEntity<String> agregarColores(@RequestBody Colores colores) {
         return new ResponseEntity<>(
