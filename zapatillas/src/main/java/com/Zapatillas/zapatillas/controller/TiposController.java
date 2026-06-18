@@ -14,13 +14,19 @@ import org.springframework.web.bind.annotation.RestController;
 import com.Zapatillas.zapatillas.model.Tipos;
 import com.Zapatillas.zapatillas.service.TiposService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+@Tag(name = "Tipos de zapatillas", description = "Endpoints para asociar tipos con zapatillas")
 @RestController
 @RequestMapping("/api/v1/tipos_zapatillas")
 public class TiposController {
     @Autowired
     private TiposService tiposService;
 
+    @Operation(
+        summary = "Listar Relaciones de tipos"
+    )
     @GetMapping
     public ResponseEntity<List<Tipos>> todasLosTiposZapatillas(){
         List<Tipos> tipos = tiposService.obtenerTodas();
@@ -30,6 +36,9 @@ public class TiposController {
         return new ResponseEntity<>(tipos,HttpStatus.OK);
     }
 
+    @Operation(
+        summary = "Asociar tipo a zapatilla"
+    )
     @PostMapping
     public ResponseEntity<?> agregaraRelacion(@RequestBody Tipos relacion){
         try {

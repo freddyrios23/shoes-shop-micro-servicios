@@ -25,6 +25,4 @@ public class Tipos {
     @ManyToOne
     @JoinColumn(name = "tipo_id")
     private Tipo tipo;
-
-    
 }

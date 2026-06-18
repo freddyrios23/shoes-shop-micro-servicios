@@ -18,8 +18,11 @@ import com.Zapatillas.zapatillas.DTO.MarcaDTO;
 import com.Zapatillas.zapatillas.model.Marca;
 import com.Zapatillas.zapatillas.service.MarcaService;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "Marcas",description = "Endpoints para gestionar las marcas de zapatillas")
 @RestController
 @RequestMapping("/api/v1/marcas")
 public class MarcaController {
@@ -27,6 +30,10 @@ public class MarcaController {
     @Autowired
     private MarcaService marcaService;
 
+    @Operation(
+        summary = "Listar marcas",
+        description = "Obtiene todas las marcas registradas en el sistema"
+    )
     @GetMapping
     public ResponseEntity<List<MarcaDTO>> todasLasMarcas(){
         List<MarcaDTO> marca = marcaService.obtenerTodas();
@@ -36,6 +43,10 @@ public class MarcaController {
         return new ResponseEntity<>(marca,HttpStatus.OK);
     } 
 
+    @Operation(
+        summary = "Buscar marca por ID",
+        description = "Obtiene una marca específica según su id"
+    )
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarMarcaPorId(@PathVariable Integer id){
         try {
@@ -46,6 +57,10 @@ public class MarcaController {
         }
     }
 
+    @Operation(
+        summary = "Crear marca",
+        description = "Registra una nueva marca de zapatillas"
+    )
     @PostMapping
     public ResponseEntity<?> agregarMarca (@Valid @RequestBody Marca marca){
         try {
@@ -55,6 +70,10 @@ public class MarcaController {
         }
     }
 
+    @Operation(
+        summary = "Actualizar marca",
+        description = "Actualiza los datos de una marca existente"
+    )
     @PatchMapping("/{id}")
     public ResponseEntity<?> editarMarca(@PathVariable Integer id,@Valid @RequestBody Marca marca){
         try {
@@ -65,6 +84,10 @@ public class MarcaController {
         }
     }
 
+    @Operation(
+        summary = "Eliminar marca",
+        description = "Elimina una marca según su id"
+    )
     @DeleteMapping("/{id}")
     public ResponseEntity<String> eliminarMarca (@PathVariable Integer id){
         String resultado = marcaService.eliminarMarca(id);
