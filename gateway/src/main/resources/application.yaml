@@ -1,3 +1,21 @@
+server:
+  port: 8080
+
 spring:
   application:
     name: gateway
+
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+            - id: zapatillas-route
+              uri: lb://ZAPATILLAS
+              predicates:
+                - Path=/api/v1/zapatillas/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
