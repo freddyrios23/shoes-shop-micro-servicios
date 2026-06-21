@@ -3,6 +3,9 @@ package com.Zapatillas.zapatillas.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -35,7 +38,7 @@ public class ZapatillaController {
         description = "Obtiene todas las zapatillas que stan registradas en el sistema"
     )
     @GetMapping
-    public ResponseEntity<List<ZapatillaDTO>> todosLasZapatillas(){
+    public ResponseEntity<List<ZapatillaDTO>> todasLasZapatillas(){
         List<ZapatillaDTO> zapatillas = zapatillaService.obtenerTodas();
         if (zapatillas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -51,7 +54,13 @@ public class ZapatillaController {
     public ResponseEntity<?> buscarZapatillaPorId(@PathVariable Integer id){
         try {
             ZapatillaDTO zapatilla =  zapatillaService.buscarPorId(id);
-            return new ResponseEntity<>(zapatilla,HttpStatus.OK);
+
+            EntityModel<ZapatillaDTO> recurso = EntityModel.of(zapatilla,
+                linkTo(methodOn(ZapatillaController.class).buscarZapatillaPorId(id)).withSelfRel(),
+                linkTo(methodOn(ZapatillaController.class).todasLasZapatillas())withRel("todas-las-zapatillas")
+            );
+
+            return new ResponseEntity<>(recurso,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>("no se encontro la Zapatilla",HttpStatus.NOT_FOUND);
         }
@@ -103,4 +112,22 @@ public class ZapatillaController {
     }
 
 
+    private EntityModel<ZapatillaDTO> convertirAHateoas(ZapatillaDTO zapatilla) {
+        EntityModel<ZapatillaDTO> recurso = EntityModel.of(zapatilla);
+
+        recurso.add(Link.of("/api/v1/zapatillas/" + zapatilla.getId()).withSelfRel());
+        recurso.add(Link.of("/api/v1/zapatillas").withRel("zapatillas"));
+
+        return recurso;
+    }
+
+    private CollectionModel<EntityModel<ZapatillaDTO>> convertirListaAHateoas(List<ZapatillaDTO> zapatillas) {
+        List<EntityModel<ZapatillaDTO>> recursos = zapatillas.stream()
+                .map(this::convertirAHateoas)
+                .toList();
+
+        return CollectionModel.of(recursos,
+                Link.of("/api/v1/zapatillas").withSelfRel()
+        );
+    }
 }
