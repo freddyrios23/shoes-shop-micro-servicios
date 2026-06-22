@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "boletas")
+@Table(name = "boleta")
 public class Boleta {
 
     @Id
@@ -46,10 +46,11 @@ public class Boleta {
     private List<Boletas> boletas;
 
     @ManyToOne
-    @JoinColumn(name = "metodoEnvio_id")
+    @JoinColumn(name = "metodoEnvio_id", referencedColumnName = "id") // <- Obliga a buscar camelCase
     private MetodoEnvio metodoEnvio;
 
+    // Busca la relación con MetodoPago y cámbiala a:
     @ManyToOne
-    @JoinColumn(name = "metodoPago_id")
+    @JoinColumn(name = "metodoPago_id", referencedColumnName = "id")  // <- Obliga a buscar camelCase
     private MetodoPago metodoPago;
 }

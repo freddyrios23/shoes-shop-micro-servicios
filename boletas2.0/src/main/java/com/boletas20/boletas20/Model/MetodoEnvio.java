@@ -23,7 +23,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "Metodo_envios")
+@Table(name = "metodoEnvio")
 public class MetodoEnvio {
 
     @Id
