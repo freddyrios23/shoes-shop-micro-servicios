@@ -16,8 +16,8 @@ public class ZapatillaModelAssembler implements RepresentationModelAssembler<Zap
     @Override
     public EntityModel<ZapatillaDTO> toModel(ZapatillaDTO zapatilla) {
         return EntityModel.of(zapatilla,
-                linkTo(methodOn(ZapatillaControllerV2.class).getZapatillabyId(zapatilla.getId())).withSelfRel(),
-                linkTo(methodOn(ZapatillaControllerV2.class).getAllZapatillas()).withRel("zapatillas")
+                linkTo(methodOn(ZapatillaControllerV2.class).porId(zapatilla.getId())).withSelfRel(),
+                linkTo(methodOn(ZapatillaControllerV2.class).todas()).withRel("zapatillas")
         );
     }
 }

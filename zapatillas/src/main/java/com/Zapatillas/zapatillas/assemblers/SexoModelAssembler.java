@@ -15,8 +15,8 @@ public class SexoModelAssembler implements RepresentationModelAssembler<SexoDTO,
     @Override
     public EntityModel<SexoDTO> toModel(SexoDTO sexo) {
         return EntityModel.of(sexo,
-                linkTo(methodOn(SexoControllerV2.class).getSexobyId(sexo.getId())).withSelfRel(),
-                linkTo(methodOn(SexoControllerV2.class).getAllSexo()).withRel("sexos")
+                linkTo(methodOn(SexoControllerV2.class).porId(sexo.getId())).withSelfRel(),
+                linkTo(methodOn(SexoControllerV2.class).todos()).withRel("sexos")
         );
     }
 }

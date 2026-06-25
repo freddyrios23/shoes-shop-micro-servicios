@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.Zapatillas.zapatillas.DTO.TipoDTO;
 import com.Zapatillas.zapatillas.model.Tipo;
+import com.Zapatillas.zapatillas.model.Zapatilla;
 import com.Zapatillas.zapatillas.repository.TipoRepository;
 
 import jakarta.transaction.Transactional;
@@ -37,9 +38,14 @@ public class TipoService {
         return convertirDto(tipo);
     }
 
-    public Tipo guardaTipo(Tipo tipo){
-        log.info("Guardando tipo: {}", tipo.getNombre());
-        return tipoRepository.save(tipo);
+    public TipoDTO guardaTipo(Tipo tipo){
+        log.info("Guardando Tipo {}",tipo.getNombre());
+
+        Tipo nuevoTipo = tipoRepository.save(tipo);
+
+        log.info("Tipo guardado exitosamente con id {}",nuevoTipo.getId());
+
+        return convertirDto(nuevoTipo);
     }
 
     public Tipo actualizarTipo(Integer id,Tipo tipo){

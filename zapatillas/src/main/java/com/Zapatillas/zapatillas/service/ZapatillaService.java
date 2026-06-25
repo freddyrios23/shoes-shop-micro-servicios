@@ -36,14 +36,14 @@ public class ZapatillaService {
         return convertirADTO(zapatilla);
     }
 
-    public Zapatilla guardarZapatilla(Zapatilla zapatilla){
+    public ZapatillaDTO guardarZapatilla(Zapatilla zapatilla){
         log.info("Guardando zapatilla {}",zapatilla.getNombre());
 
         Zapatilla nuevaZapatilla = zapatillaRepository.save(zapatilla);
 
         log.info("Zapatilla guardada exitosamente con id {}",nuevaZapatilla.getId());
 
-        return nuevaZapatilla;
+        return convertirADTO(nuevaZapatilla);
     }
 
     public Zapatilla actualizarZapatilla(Integer id, Zapatilla zapatilla) {

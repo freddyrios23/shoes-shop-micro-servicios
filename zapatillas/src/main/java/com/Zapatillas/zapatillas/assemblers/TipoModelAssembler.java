@@ -4,19 +4,20 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.RepresentationModelAssembler;
 import org.springframework.stereotype.Component;
 
-import com.Zapatillas.zapatillas.controlerV2.TiposControllerV2;
-import com.Zapatillas.zapatillas.model.Tipos;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import com.Zapatillas.zapatillas.DTO.TipoDTO;
+import com.Zapatillas.zapatillas.controlerV2.TipoControllerV2;
+
 @Component
-public class TiposModelAssembler implements RepresentationModelAssembler<Tipos,EntityModel<Tipos>>{
+public class TipoModelAssembler implements RepresentationModelAssembler<TipoDTO,EntityModel<TipoDTO>>{
 
     @Override
-    public EntityModel<Tipos> toModel(Tipos tipo) {
+    public EntityModel<TipoDTO> toModel(TipoDTO tipo) {
         return EntityModel.of(tipo,
-                linkTo(methodOn(TiposControllerV2.class).todos()).withRel("tipos_zapatillas")
+            linkTo(methodOn(TipoControllerV2.class).porId(tipo.getId())).withSelfRel(),
+                linkTo(methodOn(TipoControllerV2.class).todos()).withRel("tipos")
         );
     }
 }

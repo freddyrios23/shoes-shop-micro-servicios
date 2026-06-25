@@ -3,9 +3,6 @@ package com.Zapatillas.zapatillas.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,16 +35,12 @@ public class ZapatillaController {
         description = "Obtiene todas las zapatillas que stan registradas en el sistema"
     )
     @GetMapping
-    public ResponseEntity<?> todasLasZapatillas() {
+    public ResponseEntity<List<ZapatillaDTO>> todosLasZapatillas(){
         List<ZapatillaDTO> zapatillas = zapatillaService.obtenerTodas();
-
         if (zapatillas.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-
-        CollectionModel<EntityModel<ZapatillaDTO>> recursos = convertirListaAHateoas(zapatillas);
-
-        return new ResponseEntity<>(recursos, HttpStatus.OK);
+        return new ResponseEntity<>(zapatillas,HttpStatus.OK);
     }
 
     @Operation(
@@ -55,13 +48,12 @@ public class ZapatillaController {
         description = "Obtiene La zapatilla por un id especifico"
     )
     @GetMapping("/{id}")
-    public ResponseEntity<?> buscarZapatillaPorId(@PathVariable Integer id) {
+    public ResponseEntity<?> buscarZapatillaPorId(@PathVariable Integer id){
         try {
-            ZapatillaDTO zapatilla = zapatillaService.buscarPorId(id);
-            EntityModel<ZapatillaDTO> recurso = convertirAHateoas(zapatilla);
-            return new ResponseEntity<>(recurso, HttpStatus.OK);
+            ZapatillaDTO zapatilla =  zapatillaService.buscarPorId(id);
+            return new ResponseEntity<>(zapatilla,HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("No se encontró la zapatilla", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("no se encontro la Zapatilla",HttpStatus.NOT_FOUND);
         }
     }
 
@@ -70,16 +62,11 @@ public class ZapatillaController {
         description = "Registra una nueva zapatilla en el sistema"
     )
     @PostMapping
-    public ResponseEntity<?> agregarZapatilla(@Valid @RequestBody Zapatilla zapatilla) {
+    public ResponseEntity<?> agregarZapatilla(@Valid @RequestBody Zapatilla zapatilla){
         try {
-            Zapatilla nuevaZapatilla = zapatillaService.guardarZapatilla(zapatilla);
-
-            ZapatillaDTO zapatillaDTO = zapatillaService.buscarPorId(nuevaZapatilla.getId());
-            EntityModel<ZapatillaDTO> recurso = convertirAHateoas(zapatillaDTO);
-
-            return new ResponseEntity<>(recurso, HttpStatus.CREATED);
+            return new ResponseEntity<>(zapatillaService.guardarZapatilla(zapatilla),HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("No se guardó la zapatilla", HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("no se guardo la zapatilla",HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -88,17 +75,13 @@ public class ZapatillaController {
         description = "Edita una zapatilla por un id especifico"
     )    
     @PatchMapping("/{id}")
-    public ResponseEntity<?> editarZapatilla(@PathVariable Integer id, @RequestBody Zapatilla zapatilla) {
+    public ResponseEntity<?> editarZapatilla(@PathVariable Integer id, @Valid @RequestBody Zapatilla zapatilla){
         try {
             Zapatilla editada = zapatillaService.actualizarZapatilla(id, zapatilla);
-
-            ZapatillaDTO zapatillaDTO = zapatillaService.buscarPorId(editada.getId());
-            EntityModel<ZapatillaDTO> recurso = convertirAHateoas(zapatillaDTO);
-
-            return new ResponseEntity<>(recurso, HttpStatus.OK);
+            return new ResponseEntity<>(editada, HttpStatus.OK);
 
         } catch (RuntimeException e) {
-            return new ResponseEntity<>("Zapatilla no encontrada", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("zapatilla no encontrada", HttpStatus.NOT_FOUND);
         }
     }
     
@@ -120,22 +103,4 @@ public class ZapatillaController {
     }
 
 
-    private EntityModel<ZapatillaDTO> convertirAHateoas(ZapatillaDTO zapatilla) {
-        EntityModel<ZapatillaDTO> recurso = EntityModel.of(zapatilla);
-
-        recurso.add(Link.of("/api/v1/zapatillas/" + zapatilla.getId()).withSelfRel());
-        recurso.add(Link.of("/api/v1/zapatillas").withRel("zapatillas"));
-
-        return recurso;
-    }
-
-    private CollectionModel<EntityModel<ZapatillaDTO>> convertirListaAHateoas(List<ZapatillaDTO> zapatillas) {
-        List<EntityModel<ZapatillaDTO>> recursos = zapatillas.stream()
-                .map(this::convertirAHateoas)
-                .toList();
-
-        return CollectionModel.of(recursos,
-                Link.of("/api/v1/zapatillas").withSelfRel()
-        );
-    }
 }

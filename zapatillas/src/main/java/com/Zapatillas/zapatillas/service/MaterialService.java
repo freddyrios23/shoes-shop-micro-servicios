@@ -41,9 +41,12 @@ public class MaterialService {
         return convertirDTO(material);
     }
 
-    public Material guardarMaterial(Material material){
+    public MaterialDTO guardarMaterial(Material material){
         log.info("Guardando material con nombre {}", material.getNombre());
-        return materialRepository.save(material);
+        Material nuevoMaterial = materialRepository.save(material);
+
+        log.info("Material guardado exitosamente con el id {}",nuevoMaterial.getId());
+        return convertirDTO(nuevoMaterial);
     }
 
     public Material actualizarMaterial (Integer id,Material material){  
