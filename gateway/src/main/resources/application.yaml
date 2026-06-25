@@ -15,6 +15,11 @@ spring:
               predicates:
                 - Path=/api/v1/zapatillas/**
 
+            - id: zapatillas-v2-route
+              uri: lb://ZAPATILLAS
+              predicates:
+                - Path=/api/v2/**
+
 eureka:
   client:
     service-url:
