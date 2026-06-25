@@ -44,9 +44,12 @@ public class ColorService {
         return convertirDTO(color);
     }
 
-    public Color guardarColor(Color color){
+    public ColorDTO guardarColor(Color color){
         log.info("Guardando color con nombre {}", color.getNombre());
-        return colorRepository.save(color);
+        Color nuevoColor = colorRepository.save(color);
+
+        log.info("Color guardado exitosamente con el id {}",nuevoColor.getId());
+        return convertirDTO(nuevoColor);
     }
 
     public Color actualizarColor(Integer id, Color color){

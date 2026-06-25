@@ -44,9 +44,13 @@ public class SexoService {
         return convertirDTO(sexo);
     }
 
-    public Sexo guardarSexo(Sexo sexo){
+    public SexoDTO guardarSexo(Sexo sexo){
         log.info("Guardando sexo con genero {}", sexo.getGenero());
-        return sexoRepository.save(sexo);
+
+        Sexo nuevoSexo = sexoRepository.save(sexo);
+
+        log.info("sexo guardado exitosamente con id: {}",nuevoSexo.getGenero());
+        return convertirDTO(nuevoSexo);
     }
 
     public Sexo actualizarSexo(Integer id, Sexo sexo){

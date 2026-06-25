@@ -41,9 +41,12 @@ public class MarcaService {
         return convertirDTO(marca);
     }
 
-    public Marca guardarMarca(Marca marca){
+    public MarcaDTO guardarMarca(Marca marca){
         log.info("Guardando marca con nombre {}", marca.getNombre());
-        return marcaRepository.save(marca);
+        Marca nuevaMarca = marcaRepository.save(marca);
+
+        log.info("Marca guardada exitosamente con el id {}", marca.getId());
+        return convertirDTO(nuevaMarca);
     }
 
     public Marca actualizarMarca (Integer id,Marca marca){
