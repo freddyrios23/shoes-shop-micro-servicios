@@ -21,14 +21,11 @@ public class MetodoEnvioService {
     private MetodoEnvioRepository metodoEnvioRepository;
 
     private MetodoEnvioDTO convertirADTO(MetodoEnvio metodoEnvio) {
-
         MetodoEnvioDTO metodoEnvioDto = new MetodoEnvioDTO();
-
         metodoEnvioDto.setId(metodoEnvio.getId());
         metodoEnvioDto.setTipo(metodoEnvio.getTipo());
         metodoEnvioDto.setCosto(metodoEnvio.getCosto());
         metodoEnvioDto.setTiempoEntrega(metodoEnvio.getTiempoEntrega());
-
         return metodoEnvioDto;
     }
 
@@ -48,37 +45,33 @@ public class MetodoEnvioService {
         return convertirADTO(metodoEnvio);
     } 
 
-    public MetodoEnvio guardarMetodoEnvio (MetodoEnvio metodoEnvio){
+    public MetodoEnvioDTO guardarMetodoEnvio(MetodoEnvio metodoEnvio){
         log.info("Guardando método de envío con tipo {}", metodoEnvio.getTipo());
-        return metodoEnvioRepository.save(metodoEnvio);
+        MetodoEnvio guardado = metodoEnvioRepository.save(metodoEnvio);
+        return convertirADTO(guardado);
     }
 
-    public MetodoEnvio actualizarMetodoEnvio(Integer id,MetodoEnvio metodoEnvio){
+    public MetodoEnvioDTO actualizarMetodoEnvio(Integer id, MetodoEnvio metodoEnvio){
         log.info("Actualizando método de envío con id {}", id);
         MetodoEnvio metodoEnvio2 = metodoEnvioRepository.findById(id).orElseThrow(()-> {
             log.warn("No existe método de envío con id {}", id);
             return new RuntimeException("¡El método de envío no encontrado!");
         });
-        if (metodoEnvio.getTipo()!= null) {
-            metodoEnvio2.setTipo(metodoEnvio.getTipo());
-        }
-        if (metodoEnvio.getCosto()!= null) {
-            metodoEnvio2.setCosto(metodoEnvio.getCosto());
-        }
-        if (metodoEnvio.getTiempoEntrega()!= null) {
-            metodoEnvio2.setTiempoEntrega(metodoEnvio.getTiempoEntrega());
-        }
+        if (metodoEnvio.getTipo() != null) metodoEnvio2.setTipo(metodoEnvio.getTipo());
+        if (metodoEnvio.getCosto() != null) metodoEnvio2.setCosto(metodoEnvio.getCosto());
+        if (metodoEnvio.getTiempoEntrega() != null) metodoEnvio2.setTiempoEntrega(metodoEnvio.getTiempoEntrega());
         log.info("Método de envío con id {} actualizado correctamente", id);
-        return metodoEnvioRepository.save(metodoEnvio2);
+        return convertirADTO(metodoEnvioRepository.save(metodoEnvio2));
     }
 
     public String eliminarMetodoEnvio(Integer id){
         log.info("Intentando eliminar método de envío con id {}", id);
         try {
-            MetodoEnvio metodoEnvio = metodoEnvioRepository.findById(id).orElseThrow(()-> {
-                log.warn("No existe método de envío con id {}", id);
-                return new RuntimeException("¡Imposible eliminar! Método de envío con el id " + id + " no existe");
-            });
+            MetodoEnvio metodoEnvio = metodoEnvioRepository.findById(id)
+                .orElseThrow(() -> {
+                    log.warn("No existe método de envío con id {}", id);
+                    return new RuntimeException("¡Imposible eliminar! Método de envío con el id " + id + " no existe");
+                });
             metodoEnvioRepository.delete(metodoEnvio);
             log.info("Método de envío con id {} eliminado correctamente", id);
             return "EL envio '" + metodoEnvio.getId() + "' ha sido eliminada exitosamente";

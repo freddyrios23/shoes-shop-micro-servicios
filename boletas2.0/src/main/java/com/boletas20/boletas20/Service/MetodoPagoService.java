@@ -23,7 +23,7 @@ public class MetodoPagoService {
     private MetodoPagoDTO convertirADTO(MetodoPago metodoPago){
         MetodoPagoDTO metodoPagoDTO = new MetodoPagoDTO();
         metodoPagoDTO.setId(metodoPago.getId());
-        metodoPago.setTipo(metodoPago.getTipo());
+        metodoPagoDTO.setTipo(metodoPago.getTipo());
         return metodoPagoDTO;
     }
 
@@ -42,22 +42,23 @@ public class MetodoPagoService {
         return convertirADTO(metodoPago);
     }
 
-    public MetodoPago guardarMetodoPago(MetodoPago metodoPago){
+    public MetodoPagoDTO guardarMetodoPago(MetodoPago metodoPago){
         log.info("Guardando método de pago con tipo {}", metodoPago.getTipo());
-        return metodoPagoRepository.save(metodoPago);
+        MetodoPago guardado = metodoPagoRepository.save(metodoPago);
+        return convertirADTO(guardado);
     }
 
-    public MetodoPago actualizarMetodoPago(Integer id,MetodoPago metodoPago){
+    public MetodoPagoDTO actualizarMetodoPago(Integer id, MetodoPago metodoPago){
         log.info("Actualizando método de pago con id {}", id);
         MetodoPago metodoPago2 = metodoPagoRepository.findById(id).orElseThrow(()-> {
             log.warn("No existe método de pago con id {}", id);
             return new RuntimeException("¡El método de pago no encontrado!");
         });
-        if (metodoPago.getTipo()!= null) {
+        if (metodoPago.getTipo() != null) {
             metodoPago2.setTipo(metodoPago.getTipo());
         }
         log.info("Método de pago con id {} actualizado correctamente", id);
-        return metodoPagoRepository.save(metodoPago2);
+        return convertirADTO(metodoPagoRepository.save(metodoPago2));
     }
 
     public String eliminarMetodoPAgo(Integer id){

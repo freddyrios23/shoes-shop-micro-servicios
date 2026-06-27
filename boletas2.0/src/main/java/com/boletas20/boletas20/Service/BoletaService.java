@@ -17,10 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Transactional
 @Slf4j
 public class BoletaService {
-     @Autowired
+@Autowired
     private BoletaRepository boletaRepository;
 
-    private BoletaDTO convertirDTO (Boleta boleta){
+    private BoletaDTO convertirDTO(Boleta boleta) {
         BoletaDTO boletaDto = new BoletaDTO(); 
         boletaDto.setId(boleta.getId());
         boletaDto.setFecha(boleta.getFecha());
@@ -33,69 +33,69 @@ public class BoletaService {
         return boletaDto;
     }
 
-    public List<BoletaDTO> obtenerTodas(){
+    public List<BoletaDTO> obtenerTodas() {
         log.info("Obteniendo todas las Boletas");
         return boletaRepository.findAll().stream().map(this::convertirDTO).toList();
     }
 
-    public BoletaDTO buscarPorId(Integer id){
-        log.info("Buscando boleta con id {}",id);
+    public BoletaDTO buscarPorId(Integer id) {
+        log.info("Buscando boleta con id {}", id);
         Boleta boleta = boletaRepository.findById(id)
-        .orElseThrow(()-> {
-            log.warn("No existe boleta con id {}", id);
-            return new RuntimeException("¡La Boleta no encontrada!");
-        });
+            .orElseThrow(() -> {
+                log.warn("No existe boleta con id {}", id);
+                return new RuntimeException("¡La Boleta no fue encontrada!");
+            });
         log.info("Boleta encontrada con id {}", boleta.getId());
         return convertirDTO(boleta);
     }
 
-    public Boleta guardarBoleta(Boleta boleta){
-        log.info("Guardando boleta con fecha {}",boleta.getFecha());
 
-        Boleta nuevaBoleta = boletaRepository.save(boleta);
+    public BoletaDTO guardarBoleta(Boleta boleta) {
+        log.info("Guardando boleta con fecha {}", boleta.getFecha());
 
-        log.info("Boleta guardada exitosamente con id {}",nuevaBoleta.getId());
+        Boleta entidadGuardada = boletaRepository.save(boleta);
 
-        return nuevaBoleta;
+        log.info("Boleta guardada exitosamente con id {}", entidadGuardada.getId());
+
+        return convertirDTO(entidadGuardada);
     }
 
-    public Boleta actualizarBoleta(Integer id,Boleta boleta){
-        log.info("Actualizando boleta con id {}",id);
+    public Boleta actualizarBoleta(Integer id, Boleta boleta) {
+        log.info("Actualizando boleta con id {}", id);
         Boleta ticket = boletaRepository.findById(id)
-        .orElseThrow(()-> {
-            log.warn("No existe boleta con id {}", id);
-            return new RuntimeException("¡La Boleta no encontrada!");
-        });
-        if (boleta.getFecha()!=null) {
+            .orElseThrow(() -> {
+                log.warn("No existe boleta con id {}", id);
+                return new RuntimeException("¡La Boleta no fue encontrada!");
+            });
+        if (boleta.getFecha() != null) {
             ticket.setFecha(boleta.getFecha());
         }
-        if (boleta.getTotal()!=null) {
+        if (boleta.getTotal() != null) {
             ticket.setTotal(boleta.getTotal());
         }
-        if (boleta.getCantidad()!=null) {
+        if (boleta.getCantidad() != null) {
             ticket.setCantidad(boleta.getCantidad());
         }
-        if (boleta.getBoletas() !=null) {
+        if (boleta.getBoletas() != null) {
             ticket.setBoletas(boleta.getBoletas());
         }
         return boletaRepository.save(ticket);
     }
 
-    public String eliminarBoleta(Integer id){
-        log.info("Eliminando boleta con id {}",id);
+    public String eliminarBoleta(Integer id) {
+        log.info("Eliminando boleta con id {}", id);
         try {
             Boleta boleta = boletaRepository.findById(id)
-            .orElseThrow(()-> {
-                log.warn("No existe boleta con id {}", id);
-                return new RuntimeException("¡Imposible eliminar! La boleta con el id" + id + "no existe");
-            });
+                .orElseThrow(() -> {
+                    log.warn("No existe boleta con id {}", id);
+                    return new RuntimeException("¡Imposible eliminar! La boleta con el id " + id + " no existe");
+                });
             boletaRepository.delete(boleta);
-            log.info("Boleta eliminada exitosamente con id {}", boleta.getId());
+            log.info("Boleta estructura eliminada con id {}", boleta.getId());
             return "La boleta '" + boleta.getId() + "' ha sido eliminada exitosamente";
         } catch (Exception e) {
             log.error("Error al eliminar boleta con id {}", id, e);
             return e.getMessage();
         }
     }
-
 }

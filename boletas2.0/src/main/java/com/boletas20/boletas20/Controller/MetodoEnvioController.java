@@ -18,64 +18,62 @@ import com.boletas20.boletas20.DTO.MetodoEnvioDTO;
 import com.boletas20.boletas20.Model.MetodoEnvio;
 import com.boletas20.boletas20.Service.MetodoEnvioService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
+@Tag(name = "MetodoEnvioController",description = "Endpoints para gestionar el metod en que se enviara la zapatilla")
 @RestController
 @RequestMapping("/api/v1/metodos_envio")
 public class MetodoEnvioController {
-    
+
     @Autowired
     private MetodoEnvioService metodoEnvioService;
 
     @GetMapping
     public ResponseEntity<List<MetodoEnvioDTO>> todosLosEnvios(){
         List<MetodoEnvioDTO> envios = metodoEnvioService.obtenerTodas();
-
         if (envios.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(envios,HttpStatus.OK);
+        return new ResponseEntity<>(envios, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarEnvioPorId(@PathVariable Integer id){
         try {
             MetodoEnvioDTO envio = metodoEnvioService.buscarPorId(id);
-            return new ResponseEntity<>(envio,HttpStatus.OK);
+            return new ResponseEntity<>(envio, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("no se encontro el envio",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("no se encontro el envio", HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
     public ResponseEntity<?> agregarMetodoPago(@Valid @RequestBody MetodoEnvio metodoEnvio){
         try {
-            return new ResponseEntity<>(metodoEnvioService.guardarMetodoEnvio(metodoEnvio),HttpStatus.CREATED);
+            return new ResponseEntity<>(metodoEnvioService.guardarMetodoEnvio(metodoEnvio), HttpStatus.CREATED);
         } catch (Exception e) {
-        return new ResponseEntity<>("no se guardo la envio",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("no se guardo el envio", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> editarEnvio(@PathVariable Integer id ,@Valid @RequestBody MetodoEnvio metodoEnvio){
+    public ResponseEntity<?> editarEnvio(@PathVariable Integer id, @Valid @RequestBody MetodoEnvio metodoEnvio){
         try {
-            MetodoEnvio editada = metodoEnvioService.actualizarMetodoEnvio(id, metodoEnvio);
-            return new ResponseEntity<>(editada,HttpStatus.OK);
+            MetodoEnvioDTO editada = metodoEnvioService.actualizarMetodoEnvio(id, metodoEnvio);
+            return new ResponseEntity<>(editada, HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("envio no encontrada",HttpStatus.NOT_FOUND);
-        }
-    }   
-    
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> eliminarMetodoEnvio(@PathVariable Integer id ){
-        String resultado = metodoEnvioService.eliminarMetodoEnvio(id);
-
-        if (resultado.contains("exitosamente")) {
-            return new ResponseEntity<>(resultado,HttpStatus.OK);
-        }else{
-            return new ResponseEntity<>(resultado,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("envio no encontrado", HttpStatus.NOT_FOUND);
         }
     }
-    
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> eliminarMetodoEnvio(@PathVariable Integer id){
+        String resultado = metodoEnvioService.eliminarMetodoEnvio(id);
+        if (resultado.contains("exitosamente")) {
+            return new ResponseEntity<>(resultado, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(resultado, HttpStatus.NOT_FOUND);
+        }
+    }
 }

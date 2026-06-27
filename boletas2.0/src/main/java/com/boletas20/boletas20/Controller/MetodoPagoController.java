@@ -18,8 +18,9 @@ import com.boletas20.boletas20.DTO.MetodoPagoDTO;
 import com.boletas20.boletas20.Model.MetodoPago;
 import com.boletas20.boletas20.Service.MetodoPagoService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
+@Tag(name = "Colores",description = "Endpoints para gestionar la forma de pago de las zapatillas")
 @RestController
 @RequestMapping("/api/v1/metodo_pago")
 public class MetodoPagoController {
@@ -30,46 +31,45 @@ public class MetodoPagoController {
     @GetMapping
     public ResponseEntity<List<MetodoPagoDTO>> obtenerTodosLosPagos(){
         List<MetodoPagoDTO> metodosDePago = metodoPagoService.obtenerTodos();
-
         if (metodosDePago.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(metodosDePago,HttpStatus.OK);
+        return new ResponseEntity<>(metodosDePago, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> buscarMetodoPagoPorId(@PathVariable Integer id){
         try {
-            return new ResponseEntity<>(metodoPagoService.buscarPorId(id),HttpStatus.OK);
+            return new ResponseEntity<>(metodoPagoService.buscarPorId(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Metodo pago no encontrado",HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Metodo pago no encontrado", HttpStatus.NOT_FOUND);
         }
     }
 
     @PostMapping
     public ResponseEntity<?> agregarMetodoPago(@Valid @RequestBody MetodoPago metodoPago){
         try {
-            return new ResponseEntity<>(metodoPagoService.guardarMetodoPago(metodoPago),HttpStatus.CREATED);
+            return new ResponseEntity<>(metodoPagoService.guardarMetodoPago(metodoPago), HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error al crear metodo de pago",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error al crear metodo de pago", HttpStatus.BAD_REQUEST);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> actulizarMetodoPago(@PathVariable Integer id,@Valid @RequestBody MetodoPago metodoPago){
+    public ResponseEntity<?> actulizarMetodoPago(@PathVariable Integer id, @Valid @RequestBody MetodoPago metodoPago){
         try {
-            return new ResponseEntity<>(metodoPagoService.actualizarMetodoPago(id, metodoPago),HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(metodoPagoService.actualizarMetodoPago(id, metodoPago), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error al actualizar",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error al actualizar", HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> eliminarMetodoPago(@PathVariable Integer id){
         try {
-            return new ResponseEntity<>(metodoPagoService.eliminarMetodoPAgo(id),HttpStatus.OK);
+            return new ResponseEntity<>(metodoPagoService.eliminarMetodoPAgo(id), HttpStatus.OK);
         } catch (Exception e) {
-            return new ResponseEntity<>("Error al eliminar Metodo de pago",HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("Error al eliminar Metodo de pago", HttpStatus.BAD_REQUEST);
         }
     }
 }

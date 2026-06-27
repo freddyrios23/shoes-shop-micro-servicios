@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.boletas20.boletas20.Model.Boletas;
 import com.boletas20.boletas20.Service.BoletasService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "BoletasController",description = "Endpoints para gestionar todas las boletas de la zapatilla")
 @RestController
 @RequestMapping("/api/v1/boletas_zapatillas")
 public class BoletasController {

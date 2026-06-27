@@ -19,8 +19,9 @@ import com.boletas20.boletas20.DTO.BoletaDTO;
 import com.boletas20.boletas20.Model.Boleta;
 import com.boletas20.boletas20.Service.BoletaService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-
+@Tag(name = "Colores",description = "Endpoints para gestionar las boletas de las zapatillas")
 @RestController
 @RequestMapping("/api/v1/boletas")
 public class BoletaController {
