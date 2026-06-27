@@ -15,35 +15,35 @@ public class ZapatillasValidaciones {
     @Autowired
     private WebClient.Builder webClientBuilder;
 
-    public BoletaExternaDTO obtenerBoleta(Integer id){
-        BoletaExternaDTO boletaRecuperada = new  BoletaExternaDTO();
-
+    public BoletaExternaDTO obtenerBoleta(Integer id) {
         try {
             BoletaExternaDTO resultado = webClientBuilder.build()
                 .get()
-                .uri("http://boletas/api/v1/boletas/buscar-por-boleta/" + id)
+                .uri("http://BOLETAS/api/v1/boletas/" + id)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, response -> Mono.empty())
                 .bodyToMono(BoletaExternaDTO.class)
                 .block();
-
             if (resultado != null) {
                 return resultado;
             }
-            boletaRecuperada.setId(0);
-            boletaRecuperada.setZapatillasId(id);
-            boletaRecuperada.setFecha(null);
-            boletaRecuperada.setTotal(-1);
-            boletaRecuperada.setCantidad(0);
-            return boletaRecuperada;
+
+            return crearBoletaFallback(id, -1);
 
         } catch (Exception e) {
-            boletaRecuperada.setId(0);
-            boletaRecuperada.setZapatillasId(id);
-            boletaRecuperada.setFecha(null);
-            boletaRecuperada.setTotal(-2);
-            boletaRecuperada.setCantidad(0);
-            return boletaRecuperada;
+            return crearBoletaFallback(id, -2);
         }
-    } 
+    }
+
+    private BoletaExternaDTO crearBoletaFallback(Integer id, Integer total) {
+        BoletaExternaDTO boletaRecuperada = new BoletaExternaDTO();
+
+        boletaRecuperada.setId(0);
+        boletaRecuperada.setZapatillasId(id);
+        boletaRecuperada.setFecha(null);
+        boletaRecuperada.setTotal(total);
+        boletaRecuperada.setCantidad(0);
+
+        return boletaRecuperada;
+    }
 }
