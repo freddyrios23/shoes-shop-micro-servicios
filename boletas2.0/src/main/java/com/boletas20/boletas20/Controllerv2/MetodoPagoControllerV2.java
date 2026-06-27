@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.boletas20.boletas20.Assemblers.MetodoPagoModelAssembler;
 import com.boletas20.boletas20.DTO.MetodoPagoDTO;
 import com.boletas20.boletas20.Model.MetodoPago;
 import com.boletas20.boletas20.Service.MetodoPagoService;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 
+@RestController("MetodoPagoControllerV2")
+@RequestMapping("/api/v2/metodo-pago")
 public class MetodoPagoControllerV2 {
 
     @Autowired

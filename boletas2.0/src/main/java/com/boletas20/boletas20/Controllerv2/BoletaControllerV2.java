@@ -26,7 +26,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
-@Tag(name = "Colores",description = "Endpoints para gestionar las boletas de las zapatillas")
+@Tag(name = "Boletas",description = "Endpoints para gestionar las boletas de las zapatillas")
 @RestController("BoletaControllerV2")
 @RequestMapping("/api/v2/boleta")
 public class BoletaControllerV2 {

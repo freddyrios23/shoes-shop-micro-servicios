@@ -10,6 +10,36 @@ spring:
       server:
         webmvc:
           routes:
+            - id: boletas-v2-metodo-envio
+              uri: lb://BOLETAS
+              predicates:
+                - Path=/api/v2/metodo-envio
+
+            - id: boletas-v2-metodo-envio-id
+              uri: lb://BOLETAS
+              predicates:
+                - Path=/api/v2/metodo-envio/**
+
+            - id: boletas-v2-metodo-pago
+              uri: lb://BOLETAS
+              predicates:
+                - Path=/api/v2/metodo-pago
+
+            - id: boletas-v2-metodo-pago-id
+              uri: lb://BOLETAS
+              predicates:
+                - Path=/api/v2/metodo-pago/**
+
+            - id: boletas-v2-boletas
+              uri: lb://BOLETAS
+              predicates:
+                - Path=/api/v2/boletas
+
+            - id: boletas-v2-boletas-id
+              uri: lb://BOLETAS
+              predicates:
+                - Path=/api/v2/boletas/**
+
             - id: zapatillas-route
               uri: lb://ZAPATILLAS
               predicates:

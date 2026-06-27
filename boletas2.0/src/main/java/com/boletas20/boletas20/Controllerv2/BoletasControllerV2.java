@@ -10,6 +10,8 @@ import org.springframework.hateoas.MediaTypes;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.boletas20.boletas20.Assemblers.BoletasModelAssembler;
 import com.boletas20.boletas20.Model.Boletas;
@@ -24,6 +26,8 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @Tag(name = "BoletasController",description = "Endpoints para gestionar todas las boletas de la zapatilla")
+@RestController("BoletasControllerV2")
+@RequestMapping("/api/v2/boletas")
 public class BoletasControllerV2 {
 
 @Autowired

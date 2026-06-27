@@ -31,7 +31,7 @@ import jakarta.validation.Valid;
 @RestController("MetodoEnvioControllerV2")
 @RequestMapping("/api/v2/metodo-envio")
 public class MetodoEnvioControllerV2 {
- 
+
     @Autowired
     private MetodoEnvioService metodoEnvioService;
 
