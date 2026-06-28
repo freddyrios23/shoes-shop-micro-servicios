@@ -10,7 +10,7 @@ El sistema permite gestionar zapatillas y boletas en microservicios separados. A
 
 | Integrante             | Microservicios / responsabilidades                                                                  |
 | ---------------------- | --------------------------------------------------------------------------------------------------- |
-| Freddy Rios            | Microservicio Zapatillas, Eureka Server, Gateway, conexión entre Zapatillas y Boletas con WebClient |
+| Freddy Rios            | Microservicio Zapatillas, Eureka, Gateway, conexión entre Zapatillas y Boletas con WebClient |
 | Nicolas Castro | Microservicio Boletas 2.0                                                                           |
 
 ---
