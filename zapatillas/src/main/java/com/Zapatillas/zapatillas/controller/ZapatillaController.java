@@ -101,6 +101,4 @@ public class ZapatillaController {
             return new ResponseEntity<>(resultado, HttpStatus.NOT_FOUND);
         }
     }
-
-
 }

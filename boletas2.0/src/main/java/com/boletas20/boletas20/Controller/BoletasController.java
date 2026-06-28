@@ -24,15 +24,6 @@ public class BoletasController {
     @Autowired
     private BoletasService boletasService;
 
-    @GetMapping("/buscar-por-zapatilla/{id}")
-    public ResponseEntity<Boletas> buscarPorZapatilla(@PathVariable Integer id) {
-        try {
-            Boletas boleta = boletasService.buscarPorZapatillaId(id);
-            return new ResponseEntity<>(boleta, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
 
     @GetMapping
     public ResponseEntity<List<Boletas>> todasLasboletasZapatillas(){

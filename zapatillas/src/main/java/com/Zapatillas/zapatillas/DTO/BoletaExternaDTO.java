@@ -1,6 +1,7 @@
 package com.Zapatillas.zapatillas.DTO;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import lombok.Data;
 
@@ -8,8 +9,7 @@ import lombok.Data;
 public class BoletaExternaDTO {
     private Integer id;
     private LocalDate fecha;
-    private Integer total;
     private Integer cantidad;
-    private Integer zapatillasId;
+    private Integer total;
+    private List<Integer> zapatillasId;
 }
-

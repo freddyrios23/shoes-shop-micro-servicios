@@ -9,4 +9,5 @@ public class ZapatillaDTO {
     private Integer precio;
     private Integer marcaId;
     private String nombreMarca;
+    private BoletaExternaDTO boleta;
 }
