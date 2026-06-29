@@ -61,39 +61,16 @@ Primero hay que tener MySQL o Laragon encendido.
 
 Después se deben iniciar los servicios en este orden.
 
-Primero se inicia Eureka:
-
-```powershell
-cd eureka
-.\mvnw.cmd spring-boot:run
-```
-
+- Primero se inicia Eureka
 Luego se puede revisar en el navegador:
 
-```text
 http://localhost:8761
-```
 
-Después se inicia Boletas:
+- Después se inicia Boletas
 
-```powershell
-cd boletas2.0
-.\mvnw.cmd spring-boot:run
-```
+- Luego se inicia Zapatillas:
 
-Luego se inicia Zapatillas:
-
-```powershell
-cd zapatillas
-.\mvnw.cmd spring-boot:run
-```
-
-Finalmente se inicia Gateway:
-
-```powershell
-cd gateway
-.\mvnw.cmd spring-boot:run
-```
+- Finalmente se inicia Gateway:
 
 ## Comunicación entre Zapatillas y Boletas
 
@@ -105,43 +82,33 @@ Zapatillas no consulta directamente la base de datos de Boletas. Lo que hace es 
 
 El endpoint que se creó en Boletas fue este:
 
-```text
 /api/v1/boletas/buscar-por-zapatilla/{id}
-```
 
 En Zapatillas se llama de esta forma:
 
-```java
 .uri("http://BOLETAS/api/v1/boletas/buscar-por-zapatilla/" + id)
-```
 
 Con eso, cuando se consulta una zapatilla, también se puede mostrar la boleta relacionada.
 
 La comunicación queda así:
 
-```text
 Gateway -> Zapatillas -> WebClient -> Boletas
-```
 
 ## Pruebas realizadas
 
 Para probar Boletas directamente:
 
-```powershell
 curl.exe -i "http://localhost:8082/api/v1/boletas/buscar-por-zapatilla/1"
-```
 
 Para probar Zapatillas directamente:
 
-```powershell
 curl.exe -i "http://localhost:8081/api/v1/zapatillas"
-```
+
 
 Para probar desde Gateway:
 
-```powershell
 curl.exe -i "http://localhost:8080/api/v1/zapatillas"
-```
+
 
 La prueba por Gateway es la más importante, porque confirma que la comunicación entre los servicios está funcionando.
 
@@ -149,7 +116,7 @@ La prueba por Gateway es la más importante, porque confirma que la comunicació
 
 Al consultar zapatillas, la respuesta muestra la zapatilla junto con la boleta relacionada:
 
-```json
+
 [
   {
     "boleta": {
@@ -166,23 +133,22 @@ Al consultar zapatillas, la respuesta muestra la zapatilla junto con la boleta r
     "precio": 89990
   }
 ]
-```
+
 
 ## Endpoints principales
 
 En Zapatillas se pueden probar endpoints como:
 
-```text
+
 GET /api/v1/zapatillas
 GET /api/v1/zapatillas/{id}
 POST /api/v1/zapatillas
 PATCH /api/v1/zapatillas/{id}
 DELETE /api/v1/zapatillas/{id}
-```
 
 En Boletas se pueden probar endpoints como:
 
-```text
+
 GET /api/v1/boletas
 GET /api/v1/boletas/{id}
 GET /api/v1/boletas/buscar-por-zapatilla/{id}
@@ -190,25 +156,22 @@ POST /api/v1/boletas
 PATCH /api/v1/boletas/{id}
 PUT /api/v1/boletas/{id}
 DELETE /api/v1/boletas/{id}
-```
+
 
 ## Importante
 
 Si se entra solo a estos enlaces:
 
-```text
+
 http://localhost:8080
 http://localhost:8081
 http://localhost:8082
-```
+
 
 puede aparecer error 404. Eso no significa que el proyecto esté malo, solo que esos servicios no tienen una página de inicio.
 
-Para probar hay que usar los endpoints que empiezan con:
+Para probar hay que usar los endpoints que empiezan con: /api/v1/...
 
-```text
-/api/v1/...
-```
 
 ## Estado final
 
@@ -218,6 +181,6 @@ También queda funcionando la comunicación entre Zapatillas y Boletas usando We
 
 ## Repositorio
 
-```text
+
 https://github.com/freddyrios23/shoes-shop-micro-servicios.git
-```
+
