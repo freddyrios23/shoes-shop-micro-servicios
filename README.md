@@ -1,120 +1,128 @@
 # Shoes Shop Microservicios
 
-Este proyecto corresponde a una tienda de zapatillas trabajada con microservicios en Spring Boot. La idea principal fue separar las partes del sistema en servicios distintos y hacer que se comuniquen entre ellos usando Eureka, Gateway y WebClient.
+Este proyecto es una tienda de zapatillas hecha con microservicios en Spring Boot.
 
-En este caso se trabajaron principalmente los microservicios de **Zapatillas** y **Boletas 2.0**, además del servidor **Eureka** y el **Gateway**.
+La idea fue separar el sistema en varios servicios y hacer que se comuniquen entre ellos usando Eureka, Gateway y WebClient.
 
----
+## Integrantes
 
-## Integrantes y responsabilidades
+| Integrante               | Parte realizada                                    |
+| ------------------------ | -------------------------------------------------- |
+| Freddy Rios              | Zapatillas, Eureka, Gateway y conexión con Boletas |
+| [Nombre de tu compañero] | Boletas 2.0                                        |
 
-| Integrante               | Trabajo realizado                                                                                |
-| ------------------------ | ------------------------------------------------------------------------------------------------ |
-| Freddy Rios              | Microservicio Zapatillas, Eureka, Gateway y conexión entre Zapatillas y Boletas usando WebClient |
-| [Nombre de tu compañero] | Microservicio Boletas 2.0                                                                        |
+## Microservicios
 
----
+El proyecto tiene estos microservicios:
 
-## Servicios del proyecto
-
-El proyecto tiene estos servicios:
-
-| Servicio    | Puerto | Para qué sirve                                       |
-| ----------- | -----: | ---------------------------------------------------- |
-| Eureka      |   8761 | Registra los microservicios                          |
-| Gateway     |   8080 | Entrada principal para probar los servicios          |
-| Zapatillas  |   8081 | Gestiona las zapatillas                              |
-| Boletas 2.0 |   8082 | Gestiona boletas, métodos de pago y métodos de envío |
-
-La comunicación quedó así:
-
-```text
-Cliente → Gateway → Zapatillas → WebClient → Boletas
-```
-
----
+| Servicio    | Puerto |
+| ----------- | ------ |
+| Eureka      | 8761   |
+| Gateway     | 8080   |
+| Zapatillas  | 8081   |
+| Boletas 2.0 | 8082   |
 
 ## Tecnologías usadas
 
 * Java 21
 * Spring Boot
 * Spring Data JPA
-* Spring Cloud Eureka
-* Spring Cloud Gateway
-* WebClient
 * MySQL
 * Flyway
+* Eureka
+* Gateway
+* WebClient
 * Lombok
 * Swagger
-* Git y GitHub
+* GitHub
 
----
+## Cómo se ejecuta
 
-## Bases de datos
+Primero hay que tener MySQL o Laragon encendido.
 
-Para el proyecto se usaron bases de datos en MySQL.
+Después se levantan los servicios en este orden:
 
-### Zapatillas
+### 1. Eureka
 
-Base de datos:
-
-```text
-shoes_shop
+```powershell
+cd eureka
+.\mvnw.cmd spring-boot:run
 ```
 
-En este microservicio se manejan datos como zapatillas y marcas.
-
-### Boletas
-
-Base de datos:
+Se puede revisar en:
 
 ```text
-shoes_shop_boletas_dev
+http://localhost:8761
 ```
 
-En este microservicio se manejan las boletas, métodos de pago, métodos de envío y la relación con zapatillas.
+Ahí deberían aparecer los servicios registrados.
 
----
+### 2. Boletas 2.0
+
+```powershell
+cd boletas2.0
+.\mvnw.cmd spring-boot:run
+```
+
+### 3. Zapatillas
+
+```powershell
+cd zapatillas
+.\mvnw.cmd spring-boot:run
+```
+
+### 4. Gateway
+
+```powershell
+cd gateway
+.\mvnw.cmd spring-boot:run
+```
+
+## Pruebas
+
+Para probar Boletas directo:
+
+```powershell
+curl.exe -i "http://localhost:8082/api/v1/boletas/buscar-por-zapatilla/1"
+```
+
+Para probar Zapatillas directo:
+
+```powershell
+curl.exe -i "http://localhost:8081/api/v1/zapatillas"
+```
+
+Para probar por Gateway:
+
+```powershell
+curl.exe -i "http://localhost:8080/api/v1/zapatillas"
+```
+
+La prueba por Gateway es la más importante, porque muestra que funciona esta comunicación:
+
+```text
+Gateway → Zapatillas → WebClient → Boletas
+```
 
 ## Comunicación entre Zapatillas y Boletas
 
-Una parte importante del proyecto fue conectar el microservicio de **Zapatillas** con el microservicio de **Boletas**.
+El microservicio de Zapatillas se conecta con Boletas usando WebClient.
 
-La idea fue que Zapatillas no consulte directamente la base de datos de Boletas, sino que le pida la información al microservicio `BOLETAS`, que está registrado en Eureka.
+En vez de consultar directamente la base de datos de Boletas, Zapatillas llama al microservicio BOLETAS registrado en Eureka.
 
-Para eso se usó `WebClient`.
-
-En Zapatillas se llama a este endpoint de Boletas:
+La URL que se usa para buscar la boleta relacionada es:
 
 ```text
 /api/v1/boletas/buscar-por-zapatilla/{id}
 ```
 
-Ejemplo de la llamada interna:
+En el código se llama así:
 
 ```java
 .uri("http://BOLETAS/api/v1/boletas/buscar-por-zapatilla/" + id)
 ```
 
-Esto es parecido al ejemplo visto en clases, donde un servicio consulta información de otro servicio usando el id relacionado.
-
-En nuestro caso:
-
-```text
-Zapatillas busca una boleta por el id de la zapatilla.
-```
-
-La información de Boletas llega a Zapatillas usando un DTO llamado:
-
-```text
-BoletaExternaDTO
-```
-
-Y después esa información queda dentro del:
-
-```text
-ZapatillaDTO
-```
+Con esto, cuando se consulta una zapatilla, también aparece la boleta asociada.
 
 Ejemplo de respuesta:
 
@@ -137,199 +145,33 @@ Ejemplo de respuesta:
 ]
 ```
 
----
-
-## Orden para ejecutar el proyecto
-
-Antes de levantar los servicios hay que tener MySQL o Laragon encendido.
-
-Se recomienda iniciar los servicios en este orden:
-
-### 1. Eureka
-
-```powershell
-cd eureka
-.\mvnw.cmd spring-boot:run
-```
-
-Después se puede revisar en:
-
-```text
-http://localhost:8761
-```
-
-Ahí deberían aparecer los servicios registrados.
-
----
-
-### 2. Boletas 2.0
-
-```powershell
-cd boletas2.0
-.\mvnw.cmd spring-boot:run
-```
-
-Endpoint de prueba:
-
-```text
-http://localhost:8082/api/v1/boletas/buscar-por-zapatilla/1
-```
-
----
-
-### 3. Zapatillas
-
-```powershell
-cd zapatillas
-.\mvnw.cmd spring-boot:run
-```
-
-Endpoint de prueba:
-
-```text
-http://localhost:8081/api/v1/zapatillas
-```
-
----
-
-### 4. Gateway
-
-```powershell
-cd gateway
-.\mvnw.cmd spring-boot:run
-```
-
-Endpoint de prueba por Gateway:
-
-```text
-http://localhost:8080/api/v1/zapatillas
-```
-
----
-
-## Pruebas realizadas
-
-### Probar Eureka
-
-Abrir en el navegador:
-
-```text
-http://localhost:8761
-```
-
-Deben aparecer registrados:
-
-```text
-BOLETAS
-ZAPATILLAS
-GATEWAY
-```
-
----
-
-### Probar Boletas directo
-
-```powershell
-curl.exe -i "http://localhost:8082/api/v1/boletas/buscar-por-zapatilla/1"
-```
-
-Respuesta esperada:
-
-```json
-{
-  "cantidad": 1,
-  "fecha": "2026-06-28",
-  "id": 1,
-  "total": 89990,
-  "zapatillasId": [1]
-}
-```
-
----
-
-### Probar Zapatillas directo
-
-```powershell
-curl.exe -i "http://localhost:8081/api/v1/zapatillas"
-```
-
-Esta prueba muestra las zapatillas y dentro de cada zapatilla aparece la boleta relacionada.
-
----
-
-### Probar por Gateway
-
-```powershell
-curl.exe -i "http://localhost:8080/api/v1/zapatillas"
-```
-
-Esta es la prueba más importante, porque confirma que funciona:
-
-```text
-Gateway → Zapatillas → WebClient → Eureka → Boletas
-```
-
----
-
 ## Endpoints principales
 
 ### Zapatillas
 
-| Método | Endpoint                  | Descripción                |
-| ------ | ------------------------- | -------------------------- |
-| GET    | `/api/v1/zapatillas`      | Lista las zapatillas       |
-| GET    | `/api/v1/zapatillas/{id}` | Busca una zapatilla por id |
-| POST   | `/api/v1/zapatillas`      | Agrega una zapatilla       |
-| PATCH  | `/api/v1/zapatillas/{id}` | Edita una zapatilla        |
-| DELETE | `/api/v1/zapatillas/{id}` | Elimina una zapatilla      |
-
----
+| Método | Endpoint                  |
+| ------ | ------------------------- |
+| GET    | `/api/v1/zapatillas`      |
+| GET    | `/api/v1/zapatillas/{id}` |
+| POST   | `/api/v1/zapatillas`      |
+| PATCH  | `/api/v1/zapatillas/{id}` |
+| DELETE | `/api/v1/zapatillas/{id}` |
 
 ### Boletas
 
-| Método | Endpoint                                    | Descripción                                  |
-| ------ | ------------------------------------------- | -------------------------------------------- |
-| GET    | `/api/v1/boletas`                           | Lista las boletas                            |
-| GET    | `/api/v1/boletas/{id}`                      | Busca una boleta por id                      |
-| GET    | `/api/v1/boletas/buscar-por-zapatilla/{id}` | Busca una boleta relacionada a una zapatilla |
-| POST   | `/api/v1/boletas`                           | Agrega una boleta                            |
-| PATCH  | `/api/v1/boletas/{id}`                      | Edita una boleta                             |
-| PUT    | `/api/v1/boletas/{id}`                      | Actualiza una boleta                         |
-| DELETE | `/api/v1/boletas/{id}`                      | Elimina una boleta                           |
+| Método | Endpoint                                    |
+| ------ | ------------------------------------------- |
+| GET    | `/api/v1/boletas`                           |
+| GET    | `/api/v1/boletas/{id}`                      |
+| GET    | `/api/v1/boletas/buscar-por-zapatilla/{id}` |
+| POST   | `/api/v1/boletas`                           |
+| PATCH  | `/api/v1/boletas/{id}`                      |
+| PUT    | `/api/v1/boletas/{id}`                      |
+| DELETE | `/api/v1/boletas/{id}`                      |
 
----
+## Importante
 
-### Métodos de pago y envío
-
-| Método | Endpoint               | Descripción             |
-| ------ | ---------------------- | ----------------------- |
-| GET    | `/api/v2/metodo-pago`  | Lista métodos de pago   |
-| GET    | `/api/v2/metodo-envio` | Lista métodos de envío  |
-| GET    | `/api/v2/boletas`      | Lista boletas versión 2 |
-
----
-
-## Swagger
-
-También se puede revisar la documentación de los endpoints con Swagger.
-
-Zapatillas:
-
-```text
-http://localhost:8081/doc/swagger-ui/index.html
-```
-
-Boletas:
-
-```text
-http://localhost:8082/swagger-ui/index.html
-```
-
----
-
-## Nota sobre las URLs
-
-Si se entra solo a:
+Si se entra solo a estos puertos:
 
 ```text
 http://localhost:8080
@@ -337,24 +179,9 @@ http://localhost:8081
 http://localhost:8082
 ```
 
-puede aparecer una página de error 404, porque esos servicios no tienen una página de inicio. Para probarlos se deben usar los endpoints `/api/v1/...` o `/api/v2/...`.
+puede salir error 404, porque no tienen página de inicio.
 
----
-
-## Estado final
-
-El proyecto queda con:
-
-* Eureka funcionando.
-* Gateway funcionando.
-* Microservicio Zapatillas funcionando.
-* Microservicio Boletas 2.0 funcionando.
-* Comunicación entre Zapatillas y Boletas usando WebClient.
-* Búsqueda de boleta por id de zapatilla.
-* Respuesta de Zapatillas incluyendo datos de Boletas.
-* Proyecto subido a GitHub.
-
----
+Para probar hay que usar los endpoints `/api/v1/...`.
 
 ## Repositorio
 
