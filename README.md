@@ -10,7 +10,7 @@ También se usó MySQL para guardar los datos y GitHub para subir el proyecto.
 
 Freddy Rios: trabajó en Zapatillas, Eureka, Gateway y la conexión entre Zapatillas y Boletas usando WebClient.
 
-[Nombre de tu compañero]: trabajó en Boletas 2.0.
+Nicolas Castro: trabajó en Boletas 2.0.
 
 ## Microservicios usados
 
@@ -49,15 +49,11 @@ En el proyecto se usó:
 
 Para Zapatillas se usó la base de datos:
 
-```text
 shoes_shop
-```
 
 Para Boletas se usó la base de datos:
 
-```text
 shoes_shop_boletas_dev
-```
 
 ## Cómo se ejecuta el proyecto
 
