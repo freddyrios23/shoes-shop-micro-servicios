@@ -87,4 +87,14 @@ public class BoletaController {
             return new ResponseEntity<>(resultado,HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/buscar-por-zapatilla/{zapatillaId}")
+    public ResponseEntity<?> buscarPorZapatilla(@PathVariable Integer zapatillaId) {
+        try {
+            BoletaDTO boleta = boletaService.buscarPorZapatilla(zapatillaId);
+            return new ResponseEntity<>(boleta, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("no se encontro boleta para esa zapatilla", HttpStatus.NOT_FOUND);
+        }
+    }
 }

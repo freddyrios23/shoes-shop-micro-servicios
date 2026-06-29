@@ -98,4 +98,18 @@ public class BoletaService {
             return e.getMessage();
         }
     }
+
+    public BoletaDTO buscarPorZapatilla(Integer zapatillaId) {
+        log.info("Buscando boleta asociada a zapatilla con id {}", zapatillaId);
+
+        Boleta boleta = boletaRepository.findFirstByBoletas_Id(zapatillaId)
+            .orElseThrow(() -> {
+                log.warn("No existe boleta asociada a zapatilla con id {}", zapatillaId);
+                return new RuntimeException("¡No se encontró boleta para esa zapatilla!");
+            });
+
+        log.info("Boleta encontrada para zapatilla con id {}", zapatillaId);
+
+        return convertirDTO(boleta);
+    }
 }
